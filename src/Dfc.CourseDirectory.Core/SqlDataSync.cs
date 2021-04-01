@@ -39,7 +39,6 @@ namespace Dfc.CourseDirectory.Core
         public async Task SyncAll()
         {
             await SyncAllProviders();
-            await SyncAllVenues();
             await SyncAllCourses();
             await SyncAllApprenticeships();
         }
@@ -66,14 +65,6 @@ namespace Dfc.CourseDirectory.Core
                 new ProcessAllProviders()
                 {
                     ProcessChunk = GetSyncWithBatchingHandler<Provider>(SyncProviders)
-                }));
-
-        public Task SyncAllVenues() => WithExclusiveSqlLock(
-            nameof(SyncAllVenues),
-            () => _cosmosDbQueryDispatcher.ExecuteQuery(
-                new ProcessAllVenues()
-                {
-                    ProcessChunk = GetSyncWithBatchingHandler<Venue>(SyncVenues)
                 }));
 
         public Task SyncApprenticeship(Apprenticeship apprenticeship) => SyncApprenticeships(new[] { apprenticeship });
@@ -229,36 +220,6 @@ namespace Dfc.CourseDirectory.Core
                         WebsiteAddress = c.ContactWebsiteAddress,
                         Email = c.ContactEmail
                     })
-                }),
-                LastSyncedFromCosmos = _clock.UtcNow
-            }));
-
-        public Task SyncVenue(Venue venue) => SyncVenues(new[] { venue });
-
-        public Task SyncVenues(IEnumerable<Venue> venues) => WithSqlDispatcher(dispatcher =>
-            dispatcher.ExecuteQuery(new UpsertVenuesFromCosmos()
-            {
-                Records = venues.Select(venue => new UpsertVenuesRecord()
-                {
-                    VenueId = venue.Id,
-                    VenueStatus = (VenueStatus)venue.Status,
-                    CreatedOn = venue.CreatedDate != default ? (DateTime?)venue.CreatedDate : null,
-                    CreatedBy = venue.CreatedBy,
-                    UpdatedOn = venue.DateUpdated != default ? (DateTime?)venue.DateUpdated : null,
-                    UpdatedBy = venue.UpdatedBy,
-                    VenueName = venue.VenueName,
-                    ProviderUkprn = venue.Ukprn,
-                    TribalVenueId = venue.LocationId,
-                    ProviderVenueRef = venue.ProvVenueID,
-                    AddressLine1 = venue.AddressLine1,
-                    AddressLine2 = venue.AddressLine2,
-                    Town = venue.Town,
-                    County = venue.County,
-                    Postcode = venue.Postcode,
-                    Position = ((double)venue.Latitude, (double)venue.Longitude),
-                    Telephone = venue.PHONE,
-                    Email = venue.Email,
-                    Website = venue.Website
                 }),
                 LastSyncedFromCosmos = _clock.UtcNow
             }));
