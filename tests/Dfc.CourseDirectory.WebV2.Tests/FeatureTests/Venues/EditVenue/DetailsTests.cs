@@ -25,13 +25,14 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
             var providerId = await TestData.CreateProvider();
             var venueId = (await TestData.CreateVenue(
                 providerId,
+                createdBy: User.ToUserInfo(),
                 venueName: "Test Venue",
                 email: "test-venue@provider.com",
                 telephone: "02079460000",
                 website: "provider.com/test-venue",
                 addressLine1: "Test Venue line 1",
                 town: "Town",
-                postcode: "AB1 2DE")).Id;
+                postcode: "AB1 2DE")).VenueId;
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"venues/{venueId}");
 
@@ -59,7 +60,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
         {
             // Arrange
             var providerId = await TestData.CreateProvider();
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var journeyInstance = await CreateJourneyInstance(venueId);
             journeyInstance.UpdateState(state =>
@@ -105,7 +106,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
         {
             // Arrange
             var providerId = await TestData.CreateProvider();
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var journeyInstance = await CreateJourneyInstance(venueId);
             journeyInstance.UpdateState(state =>
@@ -115,8 +116,8 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
                 state.Town = "Glasgow";
                 state.County = "";
                 state.Postcode = "G2 1DU";
-                state.Latitude = 55.861038M;
-                state.Longitude = -4.245402M;
+                state.Latitude = 55.861038D;
+                state.Longitude = -4.245402D;
                 state.NewAddressIsOutsideOfEngland = true;
             });
 
@@ -134,8 +135,11 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
 
         private async Task<JourneyInstance<EditVenueJourneyModel>> CreateJourneyInstance(Guid venueId)
         {
-            var state = await Factory.Services.GetRequiredService<EditVenueJourneyModelFactory>()
-                .CreateModel(venueId);
+            var state = await WithSqlQueryDispatcher(async dispatcher =>
+            {
+                var modelFactory = CreateInstance<EditVenueJourneyModelFactory>(dispatcher);
+                return await modelFactory.CreateModel(venueId);
+            });
 
             return CreateJourneyInstance(
                 journeyName: "EditVenue",

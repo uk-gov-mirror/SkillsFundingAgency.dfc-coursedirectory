@@ -31,11 +31,12 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
             var providerId = await TestData.CreateProvider();
             var venueId = (await TestData.CreateVenue(
                 providerId,
+                createdBy: User.ToUserInfo(),
                 addressLine1: "Test Venue line 1",
                 addressLine2: "Test Venue line 2",
                 town: "Town",
                 county: "County",
-                postcode: "AB1 2DE")).Id;
+                postcode: "AB1 2DE")).VenueId;
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"venues/{venueId}/address");
 
@@ -61,7 +62,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
         {
             // Arrange
             var providerId = await TestData.CreateProvider();
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var journeyInstance = await CreateJourneyInstance(venueId);
             journeyInstance.UpdateState(state =>
@@ -99,7 +100,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
         {
             // Arrange
             var providerId = await TestData.CreateProvider(ukprn: 12345);
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var anotherProviderId = await TestData.CreateProvider(ukprn: 67890);
 
@@ -202,7 +203,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
         {
             // Arrange
             var providerId = await TestData.CreateProvider();
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             OnspdSearchClient
                 .Setup(c => c.Search(It.Is<OnspdSearchQuery>(q => q.Postcode == "CV1 2AA")))
@@ -255,7 +256,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
         {
             // Arrange
             var providerId = await TestData.CreateProvider();
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             OnspdSearchClient
                 .Setup(c => c.Search(It.Is<OnspdSearchQuery>(q => q.Postcode == "CV1 2AA")))
@@ -304,8 +305,8 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
                 journeyInstance.State.Town.Should().Be("Updated town");
                 journeyInstance.State.County.Should().Be("Updated county");
                 journeyInstance.State.Postcode.Should().Be("CV1 2AA");
-                journeyInstance.State.Latitude.Should().Be(42M);
-                journeyInstance.State.Longitude.Should().Be(43M);
+                journeyInstance.State.Latitude.Should().Be(42D);
+                journeyInstance.State.Longitude.Should().Be(43D);
                 journeyInstance.State.NewAddressIsOutsideOfEngland.Should().Be(expectedNewAddressIsOutsideOfEnglandValue);
             }
         }
@@ -409,8 +410,11 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.EditVenue
 
         private async Task<JourneyInstance<EditVenueJourneyModel>> CreateJourneyInstance(Guid venueId)
         {
-            var state = await Factory.Services.GetRequiredService<EditVenueJourneyModelFactory>()
-                .CreateModel(venueId);
+            var state = await WithSqlQueryDispatcher(async dispatcher =>
+            {
+                var modelFactory = CreateInstance<EditVenueJourneyModelFactory>(dispatcher);
+                return await modelFactory.CreateModel(venueId);
+            });
 
             return CreateJourneyInstance(
                 journeyName: "EditVenue",

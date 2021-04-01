@@ -7,17 +7,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using Dfc.CourseDirectory.Core.DataStore.CosmosDb;
-using Dfc.CourseDirectory.Core.DataStore.CosmosDb.Queries;
+using Dfc.CourseDirectory.Core.DataStore.Sql;
+using Dfc.CourseDirectory.Core.DataStore.Sql.Queries;
 using Dfc.CourseDirectory.Core.Search;
 using Dfc.CourseDirectory.Core.Search.Models;
 using Dfc.CourseDirectory.Services.CourseService;
 using Dfc.CourseDirectory.Services.Models;
 using Dfc.CourseDirectory.Services.Models.Courses;
 using Dfc.CourseDirectory.Services.Models.Regions;
+using Dfc.CourseDirectory.WebV2;
 using Microsoft.Extensions.Options;
 using static Dfc.CourseDirectory.Services.Models.AlternativeName;
 using Course = Dfc.CourseDirectory.Services.Models.Courses.Course;
-using Venue = Dfc.CourseDirectory.Core.DataStore.CosmosDb.Models.Venue;
+using Venue = Dfc.CourseDirectory.Core.DataStore.Sql.Models.Venue;
 
 namespace Dfc.CourseDirectory.Services.BulkUploadService
 {
@@ -26,7 +28,8 @@ namespace Dfc.CourseDirectory.Services.BulkUploadService
         private readonly CourseServiceSettings _courseServiceSettings;
         private readonly ICourseService _courseService;
         private readonly ISearchClient<Lars> _larsSearchClient;
-        private readonly ICosmosDbQueryDispatcher _cosmosDbQueryDispatcher;
+        private readonly ISqlQueryDispatcher _sqlQueryDispatcher;
+        private readonly IProviderInfoCache _providerInfoCache;
 
         private List<Venue> cachedVenues;
 
@@ -34,12 +37,14 @@ namespace Dfc.CourseDirectory.Services.BulkUploadService
             IOptions<CourseServiceSettings> courseServiceSettings,
             ICourseService courseService,
             ISearchClient<Lars> larsSearchClient,
-            ICosmosDbQueryDispatcher cosmosDbQueryDispatcher)
+            ISqlQueryDispatcher sqlQueryDispatcher,
+            IProviderInfoCache providerInfoCache)
         {
             _courseServiceSettings = courseServiceSettings?.Value ?? throw new ArgumentNullException(nameof(courseServiceSettings));
             _courseService = courseService ?? throw new ArgumentNullException(nameof(courseService));
             _larsSearchClient = larsSearchClient ?? throw new ArgumentNullException(nameof(larsSearchClient));
-            _cosmosDbQueryDispatcher = cosmosDbQueryDispatcher;
+            _sqlQueryDispatcher = sqlQueryDispatcher;
+            _providerInfoCache = providerInfoCache;
         }
 
         public int BulkUploadSecondsPerRecord
@@ -73,8 +78,10 @@ namespace Dfc.CourseDirectory.Services.BulkUploadService
             int tempCourseId = 0;
             string previousLearnAimRef = string.Empty;
 
+            var providerId = (await _providerInfoCache.GetProviderIdForUkprn(providerUKPRN)).Value;
+
             try {
-                cachedVenues = (await _cosmosDbQueryDispatcher.ExecuteQuery(new GetVenuesByProvider() { ProviderUkprn = providerUKPRN }))
+                cachedVenues = (await _sqlQueryDispatcher.ExecuteQuery(new GetVenuesByProvider() { ProviderId = providerId }))
                     .ToList();
 
                 string missingFieldsError = string.Empty;
@@ -499,7 +506,7 @@ namespace Dfc.CourseDirectory.Services.BulkUploadService
 
                     if (venueResultCache.Count == 1)
                     {
-                        courseRun.VenueId = venueResultCache[0].Id;
+                        courseRun.VenueId = venueResultCache[0].VenueId;
                     }
                     else
                     {

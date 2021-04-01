@@ -30,7 +30,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.AddTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: authorizedTLevelDefinitionIds);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var tLevelDefinitionId = tLevelDefinitions.First().TLevelDefinitionId;
 

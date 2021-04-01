@@ -55,11 +55,11 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
                 ukprn: 23456,
                 providerType: ProviderType.FE);
 
-            var venue = await TestData.CreateVenue(providerId1);
+            var venue = await TestData.CreateVenue(providerId1, createdBy: User.ToUserInfo());
 
             await User.AsTestUser(userType, providerId2);
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.Id}/delete");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.VenueId}/delete");
 
             // Act
             var response = await HttpClient.SendAsync(request);
@@ -77,12 +77,12 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var courseId = await TestData.CreateCourse(providerId, User.ToUserInfo(), configureCourseRuns: builder =>
-                builder.WithCourseRun(CourseDeliveryMode.ClassroomBased, CourseStudyMode.FullTime, CourseAttendancePattern.Daytime, venueId: venue.Id));
+                builder.WithCourseRun(CourseDeliveryMode.ClassroomBased, CourseStudyMode.FullTime, CourseAttendancePattern.Daytime, venueId: venue.VenueId));
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.Id}/delete");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.VenueId}/delete");
 
             // Act
             var response = await HttpClient.SendAsync(request);
@@ -105,7 +105,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var standard = await TestData.CreateStandard(standardCode: 1234, version: 1, standardName: "Test Standard");
             var apprenticeship = await TestData.CreateApprenticeship(
@@ -115,7 +115,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
                 ApprenticeshipStatus.Live,
                 locations: new[] { CreateApprenticeshipLocation.CreateFromVenue(venue, 30, new[] { ApprenticeshipDeliveryMode.DayRelease }) });
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.Id}/delete");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.VenueId}/delete");
 
             // Act
             var response = await HttpClient.SendAsync(request);
@@ -141,11 +141,11 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
-            var tLevel = await TestData.CreateTLevel(providerId, tLevelDefinitions.OrderBy(_ => Guid.NewGuid()).First().TLevelDefinitionId, new[] { venue.Id }, User.ToUserInfo(), Clock.UtcNow.Date);
+            var tLevel = await TestData.CreateTLevel(providerId, tLevelDefinitions.OrderBy(_ => Guid.NewGuid()).First().TLevelDefinitionId, new[] { venue.VenueId }, User.ToUserInfo(), Clock.UtcNow.Date);
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.Id}/delete");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.VenueId}/delete");
 
             // Act
             var response = await HttpClient.SendAsync(request);
@@ -168,9 +168,9 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.Id}/delete");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.VenueId}/delete");
 
             // Act
             var response = await HttpClient.SendAsync(request);
@@ -223,7 +223,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
                 ukprn: 23456,
                 providerType: ProviderType.FE);
 
-            var venue = await TestData.CreateVenue(providerId1);
+            var venue = await TestData.CreateVenue(providerId1, createdBy: User.ToUserInfo());
 
             await User.AsTestUser(userType, providerId2);
 
@@ -232,7 +232,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
                 .Add(nameof(Command.ProviderId), providerId1)
                 .ToContent();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
@@ -255,14 +255,14 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var requestContent = new FormUrlEncodedContentBuilder()
                 .Add(nameof(Command.Confirm), confirm)
                 .Add(nameof(Command.ProviderId), providerId)
                 .ToContent();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
@@ -287,14 +287,14 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var requestContent = new FormUrlEncodedContentBuilder()
                 .Add(nameof(Command.Confirm), true)
                 .Add(nameof(Command.ProviderId), Guid.NewGuid())
                 .ToContent();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
@@ -315,17 +315,17 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var courseId = await TestData.CreateCourse(providerId, User.ToUserInfo(), configureCourseRuns: builder =>
-                builder.WithCourseRun(CourseDeliveryMode.ClassroomBased, CourseStudyMode.FullTime, CourseAttendancePattern.Daytime, venueId: venue.Id));
+                builder.WithCourseRun(CourseDeliveryMode.ClassroomBased, CourseStudyMode.FullTime, CourseAttendancePattern.Daytime, venueId: venue.VenueId));
 
             var requestContent = new FormUrlEncodedContentBuilder()
                 .Add(nameof(Command.Confirm), true)
                 .Add(nameof(Command.ProviderId), providerId)
                 .ToContent();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
@@ -352,7 +352,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var standard = await TestData.CreateStandard(standardCode: 1234, version: 1, standardName: "Test Standard");
             var apprenticeship = await TestData.CreateApprenticeship(
@@ -367,7 +367,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
                 .Add(nameof(Command.ProviderId), providerId)
                 .ToContent();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
@@ -397,16 +397,18 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
-            var tLevel = await TestData.CreateTLevel(providerId, tLevelDefinitions.OrderBy(_ => Guid.NewGuid()).First().TLevelDefinitionId, new[] { venue.Id }, User.ToUserInfo(), Clock.UtcNow.Date);
+            var tLevel = await TestData.CreateTLevel(
+                providerId,
+                tLevelDefinitions.OrderBy(_ => Guid.NewGuid()).First().TLevelDefinitionId, new[] { venue.VenueId }, User.ToUserInfo(), Clock.UtcNow.Date);
 
             var requestContent = new FormUrlEncodedContentBuilder()
                 .Add(nameof(Command.Confirm), true)
                 .Add(nameof(Command.ProviderId), providerId)
                 .ToContent();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
@@ -433,14 +435,14 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var requestContent = new FormUrlEncodedContentBuilder()
                 .Add(nameof(Command.Confirm), true)
                 .Add(nameof(Command.ProviderId), providerId)
                 .ToContent();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
@@ -450,9 +452,9 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             // Assert
             response.StatusCode.Should().Be(StatusCodes.Status302Found);
-            response.Headers.Location.OriginalString.Should().Be($"/venues/{venue.Id}/delete-success?providerId={providerId}");
+            response.Headers.Location.OriginalString.Should().Be($"/venues/{venue.VenueId}/delete-success?providerId={providerId}");
 
-            CosmosDbQueryDispatcher.VerifyExecuteQuery<Core.DataStore.CosmosDb.Queries.DeleteVenue, OneOf<NotFound, Success>>(q => q.VenueId == venue.Id, Times.Once());
+            SqlQuerySpy.VerifyQuery<Core.DataStore.Sql.Queries.DeleteVenue, OneOf<NotFound, Success>>(q => q.VenueId == venue.VenueId);
         }
 
         [Fact]
@@ -464,9 +466,9 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.Id}/delete-success");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.VenueId}/delete-success");
 
             // Act
             var response = await HttpClient.SendAsync(request);
@@ -484,21 +486,21 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Venues.DeleteVenue
 
             await User.AsTestUser(TestUserType.ProviderUser, providerId);
 
-            var venue = await TestData.CreateVenue(providerId);
+            var venue = await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo());
 
             var requestContent = new FormUrlEncodedContentBuilder()
                 .Add(nameof(Command.Confirm), true)
                 .Add(nameof(Command.ProviderId), providerId)
                 .ToContent();
 
-            var deleteRequest = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.Id}/delete")
+            var deleteRequest = new HttpRequestMessage(HttpMethod.Post, $"/venues/{venue.VenueId}/delete")
             {
                 Content = requestContent
             };
 
             await HttpClient.SendAsync(deleteRequest);
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.Id}/delete-success");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/venues/{venue.VenueId}/delete-success");
 
             // Act
             var response = await HttpClient.SendAsync(request);

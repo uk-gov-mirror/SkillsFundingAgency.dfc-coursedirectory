@@ -91,8 +91,8 @@ namespace Dfc.CourseDirectory.WebV2.Features.Venues.EditVenue.Address
                 state.Town = request.Town;
                 state.County = request.County;
                 state.Postcode = request.Postcode;
-                state.Latitude = onspdPostcodeRecord.Record.lat;
-                state.Longitude = onspdPostcodeRecord.Record.@long;
+                state.Latitude = Convert.ToDouble(onspdPostcodeRecord.Record.lat);
+                state.Longitude = Convert.ToDouble(onspdPostcodeRecord.Record.@long);
                 state.NewAddressIsOutsideOfEngland = !onspdPostcodeRecord.Record.IsInEngland;
             });
 

@@ -33,8 +33,8 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.AddTLevel
 
             var providerId = await TestData.CreateProvider(providerType: providerType);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
-            var anotherVenueId = (await TestData.CreateVenue(providerId, venueName: "Second Venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
+            var anotherVenueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "Second Venue")).VenueId;
 
             var selectedTLevel = tLevelDefinitions.First();
             var whoFor = "Who for";
@@ -122,7 +122,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.AddTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: authorizedTLevelDefinitionIds);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var yourReference = "YOUR-REF";
             var startDate = new DateTime(2021, 4, 1);
@@ -168,8 +168,8 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.AddTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: authorizedTLevelDefinitionIds);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
-            var anotherVenueId = (await TestData.CreateVenue(providerId, venueName: "Second Venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
+            var anotherVenueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "Second Venue")).VenueId;
 
             var selectedTLevel = tLevelDefinitions.First();
             var whoFor = "Who for";

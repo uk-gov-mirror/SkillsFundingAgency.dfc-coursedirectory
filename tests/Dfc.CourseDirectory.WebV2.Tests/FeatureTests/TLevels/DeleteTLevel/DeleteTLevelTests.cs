@@ -62,7 +62,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var tLevel = await TestData.CreateTLevel(
                 providerId,
@@ -92,7 +92,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -174,7 +174,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -220,7 +220,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -264,7 +264,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -313,7 +313,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -374,7 +374,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -435,7 +435,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -502,7 +502,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 
@@ -566,7 +566,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.TLevels.DeleteTLevel
                 providerType: ProviderType.TLevels,
                 tLevelDefinitionIds: tLevelDefinitions.Select(tld => tld.TLevelDefinitionId).ToArray());
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "T Level venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "T Level venue")).VenueId;
 
             var tLevelDefinition = tLevelDefinitions.First();
 

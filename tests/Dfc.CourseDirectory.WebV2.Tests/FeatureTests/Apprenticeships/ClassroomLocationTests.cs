@@ -23,8 +23,8 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Apprenticeships
             // Arrange
             var providerId = await TestData.CreateProvider(providerType: ProviderType.Apprenticeships);
 
-            await TestData.CreateVenue(providerId, venueName: "Venue 1");
-            await TestData.CreateVenue(providerId, venueName: "Venue 2");
+            await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "Venue 1");
+            await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "Venue 2");
 
             var parentMptxInstance = MptxManager.CreateInstance(new ParentFlow());
             var childMptxInstance = MptxManager.CreateInstance<FlowModel, IFlowModelCallback>(
@@ -173,7 +173,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Apprenticeships
             // Arrange
             var providerId = await TestData.CreateProvider(providerType: ProviderType.Apprenticeships);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var parentMptxInstance = MptxManager.CreateInstance(new ParentFlow());
             var childMptxInstance = MptxManager.CreateInstance<FlowModel, IFlowModelCallback>(
@@ -210,7 +210,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Apprenticeships
             // Arrange
             var providerId = await TestData.CreateProvider(providerType: ProviderType.Apprenticeships);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var parentMptxInstance = MptxManager.CreateInstance(new ParentFlow());
             var childMptxInstance = MptxManager.CreateInstance<FlowModel, IFlowModelCallback>(
@@ -246,7 +246,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Apprenticeships
             // Arrange
             var providerId = await TestData.CreateProvider(providerType: ProviderType.Apprenticeships);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var parentMptxInstance = MptxManager.CreateInstance(new ParentFlow());
             var childMptxInstance = MptxManager.CreateInstance<FlowModel, IFlowModelCallback>(
@@ -287,7 +287,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Apprenticeships
             // Arrange
             var providerId = await TestData.CreateProvider(providerType: ProviderType.Apprenticeships);
 
-            await TestData.CreateVenue(providerId, venueName: "The Venue");
+            await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "The Venue");
 
             var parentMptxInstance = MptxManager.CreateInstance(new ParentFlow());
             var childMptxInstance = MptxManager.CreateInstance<FlowModel, IFlowModelCallback>(
@@ -314,7 +314,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Apprenticeships
             // Arrange
             var providerId = await TestData.CreateProvider(providerType: ProviderType.Apprenticeships);
 
-            var venueId = (await TestData.CreateVenue(providerId, venueName: "The Venue")).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo(), venueName: "The Venue")).VenueId;
 
             var parentMptxInstance = MptxManager.CreateInstance(new ParentFlow());
             var childMptxInstance = MptxManager.CreateInstance<FlowModel, IFlowModelCallback>(
@@ -376,7 +376,7 @@ namespace Dfc.CourseDirectory.WebV2.Tests.FeatureTests.Apprenticeships
             // Arrange
             var providerId = await TestData.CreateProvider(providerType: ProviderType.Apprenticeships);
 
-            var venueId = (await TestData.CreateVenue(providerId)).Id;
+            var venueId = (await TestData.CreateVenue(providerId, createdBy: User.ToUserInfo())).VenueId;
 
             var parentMptxInstance = MptxManager.CreateInstance(new ParentFlow());
             var childMptxInstance = MptxManager.CreateInstance<FlowModel, IFlowModelCallback>(
