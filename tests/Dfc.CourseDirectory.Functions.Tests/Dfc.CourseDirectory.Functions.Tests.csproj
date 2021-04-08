@@ -4,7 +4,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Faker.Net" Version="1.4.108" />
+    <PackageReference Include="Faker.Net" Version="1.5.126" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />

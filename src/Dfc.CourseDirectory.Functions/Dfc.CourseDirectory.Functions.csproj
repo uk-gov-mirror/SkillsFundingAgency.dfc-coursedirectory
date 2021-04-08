@@ -9,6 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" Version="11.1.1" />
+    <PackageReference Include="Faker.Net" Version="1.5.126" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="3.0.7" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.11" />
