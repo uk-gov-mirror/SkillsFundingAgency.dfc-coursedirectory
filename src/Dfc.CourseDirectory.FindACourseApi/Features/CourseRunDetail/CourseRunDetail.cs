@@ -63,7 +63,7 @@ namespace Dfc.CourseDirectory.FindACourseApi.Features.CourseRunDetail
             await Task.WhenAll(getProvider, getQualification, getVenues, getFeChoice);
 
             var provider = await getProvider;
-            var qualification = (await getQualification).Items.SingleOrDefault();
+            var qualification = (await getQualification).Items.SingleOrDefault()?.Record;
             var venues = await getVenues;
             var feChoice = await getFeChoice;
             var sqlProvider = await _sqlQueryDispatcher.ExecuteQuery(new Core.DataStore.Sql.Queries.GetProviderById { ProviderId = provider.Id });
@@ -101,14 +101,14 @@ namespace Dfc.CourseDirectory.FindACourseApi.Features.CourseRunDetail
                 Course = new CourseViewModel
                 {
                     AdvancedLearnerLoan = course.AdvancedLearnerLoan,
-                    AwardOrgCode = course.AwardOrgCode,
+                    AwardOrgCode = qualification.AwardOrgCode,
                     CourseDescription = course.CourseDescription,
                     CourseId = course.Id,
                     EntryRequirements = course.EntryRequirements,
                     HowYoullBeAssessed = course.HowYoullBeAssessed,
                     HowYoullLearn = course.HowYoullLearn,
                     LearnAimRef = course.LearnAimRef,
-                    QualificationLevel = course.NotionalNVQLevelv2,
+                    QualificationLevel = qualification.NotionalNVQLevelv2,
                     WhatYoullLearn = course.WhatYoullLearn,
                     WhatYoullNeed = course.WhatYoullNeed,
                     WhereNext = course.WhereNext
@@ -150,14 +150,14 @@ namespace Dfc.CourseDirectory.FindACourseApi.Features.CourseRunDetail
                 },
                 Qualification = new QualificationViewModel
                 {
-                    AwardOrgCode = qualification.Record.AwardOrgCode,
-                    AwardOrgName = qualification.Record.AwardOrgName,
-                    LearnAimRef = qualification.Record.LearnAimRef,
-                    LearnAimRefTitle = qualification.Record.LearnAimRefTitle,
-                    LearnAimRefTypeDesc = qualification.Record.LearnAimRefTypeDesc,
-                    QualificationLevel = qualification.Record.NotionalNVQLevelv2,
-                    SectorSubjectAreaTier1Desc = qualification.Record.SectorSubjectAreaTier1Desc,
-                    SectorSubjectAreaTier2Desc = qualification.Record.SectorSubjectAreaTier2Desc
+                    AwardOrgCode = qualification.AwardOrgCode,
+                    AwardOrgName = qualification.AwardOrgName,
+                    LearnAimRef = qualification.LearnAimRef,
+                    LearnAimRefTitle = qualification.LearnAimRefTitle,
+                    LearnAimRefTypeDesc = qualification.LearnAimRefTypeDesc,
+                    QualificationLevel = qualification.NotionalNVQLevelv2,
+                    SectorSubjectAreaTier1Desc = qualification.SectorSubjectAreaTier1Desc,
+                    SectorSubjectAreaTier2Desc = qualification.SectorSubjectAreaTier2Desc
                 },
                 AlternativeCourseRuns = alternativeCourseRuns.Select(c => new AlternativeCourseRunViewModel
                 {
