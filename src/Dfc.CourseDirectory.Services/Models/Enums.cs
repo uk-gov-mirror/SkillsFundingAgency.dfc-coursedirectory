@@ -236,7 +236,7 @@ namespace Dfc.CourseDirectory.Services.Models
     {
         [Description("Undefined")]
         Undefined = 0,
-        [Description("At one of your venues")]
+        [Description("At one of your locations")]
         YourLocation = 1,
         [Description("At an employer's address")]
         EmployersAddress = 2,

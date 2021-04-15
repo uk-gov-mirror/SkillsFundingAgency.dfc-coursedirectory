@@ -183,7 +183,7 @@ namespace Dfc.CourseDirectory.WebV2.Features.TLevels.AddTLevel.Details
 
             RuleFor(c => c.LocationVenueIds)
                 .NotEmpty()
-                    .WithMessage("Select a T Level venue");
+                    .WithMessage("Select a T Level location");
 
             RuleFor(c => c.Website).Website();
         }
